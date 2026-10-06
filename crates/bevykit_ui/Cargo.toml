@@ -1,0 +1,36 @@
+[package]
+name = "bevykit_ui"
+description = "Themeable widgets, focus navigation, bindings, panels, and feedback for Bevy UI."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[features]
+default = ["localization"]
+localization = ["dep:bevykit_data"]
+
+[dependencies]
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_ui",
+    "bevy_ui_widgets",
+    "bevy_input_focus",
+    "bevy_text",
+    "bevy_picking",
+    "bevy_window",
+    "bevy_camera",
+    "bevy_color",
+    "bevy_image",
+    "ui_picking",
+] }
+bevykit_core = { workspace = true }
+bevykit_data = { workspace = true, optional = true }
+bevykit_input = { workspace = true }
+
+[lints]
+workspace = true

@@ -20,6 +20,7 @@ bevykit_core = { path = "crates/bevykit_core", version = "0.1.0" }
 bevykit_data = { path = "crates/bevykit_data", version = "0.1.0" }
 bevykit_input = { path = "crates/bevykit_input", version = "0.1.0" }
 bevykit_macros = { path = "crates/bevykit_macros", version = "0.1.0" }
+bevykit_ui = { path = "crates/bevykit_ui", version = "0.1.0" }
 
 directories = "6.0"
 intl_pluralrules = "7.0"
