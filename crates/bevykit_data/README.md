@@ -2,6 +2,7 @@
 
 Data infrastructure for Bevy games:
 
+- **Assets**: typed collections and loading groups with progress, failures, and retry.
 - **Storage**: atomic file replacement with backups, browser `localStorage`, or a custom
   backend. Writes are ordered so older requests never overwrite newer data.
 - **Settings**: typed, sanitized, persisted settings with preview, commit, and cancel.
