@@ -52,7 +52,9 @@ pub struct Pointer {
     press_position: Vec2,
     press_time: f64,
     owner: Option<Entity>,
+    hover_targets: SmallVec<[Entity; 8]>,
     press_targets: SmallVec<[Entity; 8]>,
+    over_ui: bool,
     pressed_over_ui: bool,
 }
 
@@ -66,7 +68,9 @@ impl Pointer {
             press_position: position,
             press_time: 0.0,
             owner: None,
+            hover_targets: SmallVec::new(),
             press_targets: SmallVec::new(),
+            over_ui: false,
             pressed_over_ui: false,
         }
     }
@@ -124,6 +128,21 @@ impl Pointer {
     /// Returns the entities under the pointer when it was pressed, including their ancestors.
     pub fn press_targets(&self) -> &[Entity] {
         &self.press_targets
+    }
+
+    /// Returns the entities currently under the pointer, including their ancestors.
+    pub fn hover_targets(&self) -> &[Entity] {
+        &self.hover_targets
+    }
+
+    /// Returns `true` if the pointer is currently over `entity` or one of its descendants.
+    pub fn is_over(&self, entity: Entity) -> bool {
+        self.hover_targets.contains(&entity)
+    }
+
+    /// Returns `true` if the pointer is currently over a UI node.
+    pub fn over_ui(&self) -> bool {
+        self.over_ui
     }
 
     /// Returns `true` if the press began over a UI node.
@@ -285,6 +304,7 @@ impl PointerRouter {
                 pointer.phase = PointerPhase::Hovering;
                 pointer.owner = None;
                 pointer.press_targets.clear();
+                pointer.pressed_over_ui = false;
             } else if pointer.phase == PointerPhase::Pressed {
                 pointer.phase = PointerPhase::Held;
             }
@@ -381,27 +401,27 @@ pub(crate) fn update_pointers(
     }
 
     for pointer in &mut router.pointers {
-        if pointer.phase != PointerPhase::Pressed {
-            continue;
-        }
-        pointer.press_position = pointer.position;
-        pointer.press_time = now;
-        pointer.owner = None;
-        pointer.press_targets.clear();
-        pointer.pressed_over_ui = false;
-        let Some(hits) = hover_map.as_deref().and_then(|map| map.get(&pointer.id)) else {
-            continue;
-        };
-        for &hit in hits.keys() {
-            pointer.pressed_over_ui |= nodes.contains(hit);
-            let mut current = Some(hit);
-            while let Some(entity) = current {
-                if pointer.press_targets.contains(&entity) {
-                    break;
+        pointer.hover_targets.clear();
+        pointer.over_ui = false;
+        if let Some(hits) = hover_map.as_deref().and_then(|map| map.get(&pointer.id)) {
+            for &hit in hits.keys() {
+                pointer.over_ui |= nodes.contains(hit);
+                let mut current = Some(hit);
+                while let Some(entity) = current {
+                    if pointer.hover_targets.contains(&entity) {
+                        break;
+                    }
+                    pointer.hover_targets.push(entity);
+                    current = parents.get(entity).ok().map(ChildOf::parent);
                 }
-                pointer.press_targets.push(entity);
-                current = parents.get(entity).ok().map(ChildOf::parent);
             }
+        }
+        if pointer.phase == PointerPhase::Pressed {
+            pointer.press_position = pointer.position;
+            pointer.press_time = now;
+            pointer.owner = None;
+            pointer.press_targets = pointer.hover_targets.clone();
+            pointer.pressed_over_ui = pointer.over_ui;
         }
     }
 
