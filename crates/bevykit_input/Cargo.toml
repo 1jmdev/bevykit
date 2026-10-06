@@ -1,0 +1,34 @@
+[package]
+name = "bevykit_input"
+description = "Named input actions, contexts, pointer ownership, and gestures for Bevy."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_window",
+    "bevy_picking",
+    "bevy_ui",
+    "keyboard",
+    "mouse",
+    "touch",
+    "gamepad",
+    "serialize",
+] }
+bevykit_core = { workspace = true }
+bevykit_macros = { workspace = true }
+serde = { workspace = true }
+smallvec = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[lints]
+workspace = true
