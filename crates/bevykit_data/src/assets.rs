@@ -165,7 +165,7 @@ pub struct AssetGroupFailed {
 }
 
 trait ErasedCollection: Send + Sync {
-    fn type_id(&self) -> TypeId;
+    fn collection_type(&self) -> TypeId;
     fn type_name(&self) -> &'static str;
     fn load(&self, server: &AssetServer) -> LoadedCollection;
     fn remove(&self, world: &mut World);
@@ -179,7 +179,7 @@ struct LoadedCollection {
 }
 
 impl<C: AssetCollection> ErasedCollection for CollectionEntry<C> {
-    fn type_id(&self) -> TypeId {
+    fn collection_type(&self) -> TypeId {
         TypeId::of::<C>()
     }
 
@@ -283,7 +283,7 @@ impl GroupBuilder<'_> {
             .definition
             .collections
             .iter()
-            .any(|collection| collection.type_id() == TypeId::of::<C>())
+            .any(|collection| collection.collection_type() == TypeId::of::<C>())
         {
             self.definition
                 .collections
@@ -523,7 +523,7 @@ fn unload_group(world: &mut World, groups: &mut AssetGroups, group: &AssetGroup)
                 && other_definition
                     .collections
                     .iter()
-                    .any(|candidate| candidate.type_id() == collection.type_id())
+                    .any(|candidate| candidate.collection_type() == collection.collection_type())
         });
         if !shared {
             collection.remove(world);
