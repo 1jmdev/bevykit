@@ -13,6 +13,7 @@
 //! settings.commit(edit); // or settings.cancel(edit) to restore the previous values
 //! ```
 
+use std::cmp::Ordering;
 use std::marker::PhantomData;
 use std::ops::{Deref, RangeInclusive};
 
@@ -55,13 +56,11 @@ pub fn clamp_to_range<T: PartialOrd + Copy + std::fmt::Debug>(
     issues: &mut Vec<SettingIssue>,
 ) {
     let (start, end) = (*range.start(), *range.end());
-    // Comparisons are written so that NaN is replaced by the lower bound.
-    let corrected = if !(*value >= start) {
-        start
-    } else if !(*value <= end) {
-        end
-    } else {
-        return;
+    // Incomparable values, such as NaN, are replaced by the lower bound.
+    let corrected = match ((*value).partial_cmp(&start), (*value).partial_cmp(&end)) {
+        (Some(Ordering::Less) | None, _) => start,
+        (_, Some(Ordering::Greater)) => end,
+        _ => return,
     };
     issues.push(SettingIssue {
         field,

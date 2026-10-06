@@ -560,7 +560,7 @@ impl Saves {
                 });
             }
         }
-        summaries.sort_by(|a, b| b.saved_at.cmp(&a.saved_at));
+        summaries.sort_by_key(|summary| std::cmp::Reverse(summary.saved_at));
         Ok(summaries)
     }
 
