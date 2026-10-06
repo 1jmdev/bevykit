@@ -5,6 +5,7 @@
 
 mod action;
 mod collection;
+mod content;
 mod paths;
 mod save;
 mod settings;
@@ -59,6 +60,21 @@ pub fn derive_save_data(input: TokenStream) -> TokenStream {
 pub fn derive_asset_collection(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     collection::derive(input)
+        .unwrap_or_else(syn::Error::into_compile_error)
+        .into()
+}
+
+/// Implements `ContentDefinition` for a struct with named fields.
+///
+/// - The identifier is the field named `id`, or the field marked `#[content(id)]`.
+/// - `#[content(reference)]` marks fields holding `ContentId`s (directly, in `Option`, or in
+///   `Vec`) that must refer to existing definitions.
+/// - `#[content(kind = "...")]` names the kind in error messages (default: the type name in
+///   `snake_case`).
+#[proc_macro_derive(ContentDefinition, attributes(content))]
+pub fn derive_content_definition(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    content::derive(input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
 }
