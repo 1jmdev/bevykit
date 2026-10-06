@@ -1,0 +1,22 @@
+[package]
+name = "bevykit_core"
+description = "Shared foundations for bevykit: keys, scopes, scoped tasks, pause control, deadlines, and schedule ordering."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+bevy = { workspace = true, features = ["std", "async_executor", "bevy_log", "bevy_window"] }
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[lints]
+workspace = true
