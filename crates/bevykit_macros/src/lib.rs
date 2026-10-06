@@ -4,6 +4,7 @@
 //! using this crate directly.
 
 mod action;
+mod collection;
 mod paths;
 mod save;
 mod settings;
@@ -45,6 +46,19 @@ pub fn derive_settings(input: TokenStream) -> TokenStream {
 pub fn derive_save_data(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     save::derive(input)
+        .unwrap_or_else(syn::Error::into_compile_error)
+        .into()
+}
+
+/// Implements `AssetCollection` for a struct of handles.
+///
+/// - `#[asset(path = "...")]` loads a `Handle<T>` field.
+/// - `#[asset(paths("...", "..."))]` loads a `Vec<Handle<T>>` field.
+/// - Fields without the attribute use `Default`.
+#[proc_macro_derive(AssetCollection, attributes(asset))]
+pub fn derive_asset_collection(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    collection::derive(input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
 }
