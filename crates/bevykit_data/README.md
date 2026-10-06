@@ -6,3 +6,4 @@ Data infrastructure for Bevy games:
   backend. Writes are ordered so older requests never overwrite newer data.
 - **Settings**: typed, sanitized, persisted settings with preview, commit, and cancel.
 - **Saves**: versioned save slots with migrations, backup recovery, and `SaveId` references.
+- **Localization**: TOML translations with plurals, interpolation, fallbacks, and validation.
