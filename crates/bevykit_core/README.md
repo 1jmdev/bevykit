@@ -8,6 +8,8 @@ Shared foundations used by every bevykit module:
 - **Scoped tasks**: asynchronous work whose completion is applied to the world as a command.
 - **Pause**: reference-counted gameplay pause that keeps presentation responsive.
 - **Deadlines**: persistent wall-clock deadlines with a configurable clock-change policy.
+- **Tweens**: eased animations of any component, with replace, blend, and queue policies.
+- **Platform**: background/foreground schedules, haptics, and quality profiles.
 - **Schedule ordering**: the documented `KitSystems` sets.
 
 This crate is re-exported by `bevykit`; most games depend on that crate instead.

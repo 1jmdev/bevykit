@@ -14,6 +14,7 @@
 //! input processing and picking, so the data they read is current for the frame.
 
 use bevy::input::InputSystems;
+use bevy::transform::TransformSystems;
 use bevy::prelude::*;
 
 /// System sets used by bevykit modules. See the [module documentation](self) for the order.
@@ -46,7 +47,9 @@ pub(crate) fn configure_sets(app: &mut App) {
     )
     .configure_sets(
         PostUpdate,
-        (KitSystems::Bindings, KitSystems::Presentation).chain(),
+        (KitSystems::Bindings, KitSystems::Presentation)
+            .chain()
+            .before(TransformSystems::Propagate),
     )
     .configure_sets(Last, KitSystems::Cleanup);
 }

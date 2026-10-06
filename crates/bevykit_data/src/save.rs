@@ -33,6 +33,7 @@ use std::borrow::Cow;
 use std::time::Duration;
 
 use bevy::ecs::lifecycle::HookContext;
+use bevy::ecs::message::MessageCursor;
 use bevy::ecs::system::BoxedSystem;
 use bevy::ecs::world::DeferredWorld;
 use bevy::platform::collections::HashMap;
@@ -616,12 +617,12 @@ fn decode_file(
 }
 
 /// Processes save and load requests. Runs exclusively at the end of the frame.
-fn process_saves(world: &mut World) {
+fn process_saves(world: &mut World, mut lifecycle: Local<MessageCursor<AppLifecycle>>) {
     let suspending = world
-        .get_resource_mut::<Messages<AppLifecycle>>()
+        .get_resource::<Messages<AppLifecycle>>()
         .is_some_and(|messages| {
-            messages
-                .iter_current_update_messages()
+            lifecycle
+                .read(messages)
                 .any(|event| matches!(event, AppLifecycle::WillSuspend))
         });
     let delta = world.resource::<Time<Virtual>>().delta();

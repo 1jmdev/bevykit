@@ -4,9 +4,11 @@ pub mod deadline;
 pub mod display;
 pub mod key;
 pub mod pause;
+pub mod platform;
 pub mod schedule;
 pub mod scope;
 pub mod task;
+pub mod tween;
 
 use bevy::prelude::*;
 
@@ -20,13 +22,21 @@ pub mod prelude {
     pub use crate::display::SafeAreaInsets;
     pub use crate::key::{IntoKey, Key};
     pub use crate::pause::{PausePolicy, PauseReason, PauseState, gameplay_paused, gameplay_running};
+    pub use crate::platform::{
+        HapticBackend, HapticPattern, Haptics, LifecycleState, OnBackground, OnForeground,
+        QualityLevel, QualityProfiles,
+    };
     pub use crate::schedule::KitSystems;
     pub use crate::scope::{OwnedBy, Scope, ScopeClosing, ScopeCommandsExt, ScopeOwned, Scopes};
     pub use crate::task::{KitTasks, TaskPoolKind};
+    pub use crate::tween::{
+        TimeDomain, TweenAppExt, TweenCompleted, TweenConflict, TweenLens, TweenRepeat,
+        Tweens,
+    };
 }
 
 /// Installs the shared foundations: schedule ordering, scopes, scoped tasks, pause control,
-/// deadlines, and display information.
+/// deadlines, tweens, lifecycle hooks, haptics, quality profiles, and display information.
 ///
 /// Every other bevykit plugin adds this plugin automatically if it is missing, so games only
 /// need to add it explicitly to change its configuration.
@@ -36,6 +46,8 @@ pub struct KitCorePlugin;
 impl Plugin for KitCorePlugin {
     fn build(&self, app: &mut App) {
         schedule::configure_sets(app);
+        platform::build(app);
+        tween::TweenAppExt::register_tweenable::<Transform>(app);
 
         app.init_resource::<pause::PauseState>()
             .init_resource::<pause::PausePolicy>()
