@@ -1,6 +1,6 @@
 [package]
-name = "bevykit"
-description = "A modular toolkit of game infrastructure for Bevy."
+name = "bevykit_macros"
+description = "Derive macros for bevykit."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -10,9 +10,14 @@ authors.workspace = true
 keywords.workspace = true
 categories.workspace = true
 
+[lib]
+proc-macro = true
+
 [dependencies]
-bevykit_core = { workspace = true }
-bevykit_input = { workspace = true, optional = true }
+proc-macro-crate = { workspace = true }
+proc-macro2 = { workspace = true }
+quote = { workspace = true }
+syn = { workspace = true }
 
 [lints]
 workspace = true
