@@ -29,6 +29,7 @@ App::new()
 | `bevykit::input`  | `bevykit_input`  | `input`                                                      |
 | `bevykit::ui`     | `bevykit_ui`     | `ui`                                                         |
 | `bevykit::data`   | `bevykit_data`   | `assets`, `content`, `save`, `settings`, or `localization`   |
+| `bevykit::media`  | `bevykit_media`  | `audio`, `scene`, or `animation`                             |
 
 Derive macros (`KitAction`, `Settings`, `SaveData`, `AssetCollection`, `ContentDefinition`) are
 exported at the crate root and resolve their paths through this crate.
@@ -45,13 +46,16 @@ exported at the crate root and resolve their paths through this crate.
 | `save`         | yes     | Versioned save slots                                      |
 | `settings`     | yes     | Persisted settings                                        |
 | `localization` | yes     | Translations; also localizes UI text                      |
+| `audio`        | no      | Buses, cues, spatial sound, music                         |
+| `scene`        | no      | Bindings on named scene nodes                             |
+| `animation`    | no      | Clip libraries, `Animations`, markers (implies `scene`)   |
 | `mobile`       | no      | Reserved for platform adapters                            |
 
 ## `KitPlugins`
 
 Adds the non-generic plugins enabled by features: `KitCorePlugin`, `KitUiPlugin`,
-`KitAssetsPlugin`, `KitContentPlugin`, and `KitSavePlugin`. Plugins that depend on game types
-are added separately:
+`KitAssetsPlugin`, `KitContentPlugin`, `KitSavePlugin`, `KitAudioPlugin`, `KitScenePlugin`, and
+`KitAnimationPlugin`. Plugins that depend on game types are added separately:
 
 ```rust,ignore
 app.add_plugins((

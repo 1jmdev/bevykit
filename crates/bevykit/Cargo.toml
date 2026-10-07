@@ -21,6 +21,9 @@ content = ["dep:bevykit_data"]
 save = ["dep:bevykit_data"]
 settings = ["dep:bevykit_data"]
 localization = ["dep:bevykit_data", "bevykit_ui?/localization"]
+audio = ["dep:bevykit_media", "bevykit_media?/audio"]
+scene = ["dep:bevykit_media", "bevykit_media?/scene"]
+animation = ["dep:bevykit_media", "bevykit_media?/animation"]
 mobile = []
 
 [dependencies]
@@ -29,6 +32,7 @@ bevykit_core = { workspace = true }
 bevykit_data = { workspace = true, optional = true }
 bevykit_input = { workspace = true, optional = true }
 bevykit_macros = { workspace = true }
+bevykit_media = { workspace = true, optional = true, default-features = false }
 bevykit_ui = { workspace = true, optional = true, default-features = false }
 
 [dev-dependencies]

@@ -11,6 +11,8 @@ pub use bevykit_core as core;
 pub use bevykit_data as data;
 #[cfg(feature = "input")]
 pub use bevykit_input as input;
+#[cfg(any(feature = "audio", feature = "scene", feature = "animation"))]
+pub use bevykit_media as media;
 #[cfg(feature = "ui")]
 pub use bevykit_ui as ui;
 
@@ -29,6 +31,8 @@ pub mod prelude {
     pub use bevykit_data::prelude::*;
     #[cfg(feature = "input")]
     pub use bevykit_input::prelude::*;
+    #[cfg(any(feature = "audio", feature = "scene", feature = "animation"))]
+    pub use bevykit_media::prelude::*;
     #[cfg(feature = "ui")]
     pub use bevykit_ui::prelude::*;
 
@@ -55,6 +59,12 @@ impl PluginGroup for KitPlugins {
         let group = group.add(bevykit_data::KitContentPlugin);
         #[cfg(feature = "save")]
         let group = group.add(bevykit_data::save::KitSavePlugin::default());
+        #[cfg(feature = "audio")]
+        let group = group.add(bevykit_media::KitAudioPlugin);
+        #[cfg(feature = "scene")]
+        let group = group.add(bevykit_media::KitScenePlugin);
+        #[cfg(feature = "animation")]
+        let group = group.add(bevykit_media::KitAnimationPlugin);
         group
     }
 }

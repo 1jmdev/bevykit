@@ -20,9 +20,10 @@ underlying Bevy data always accessible.
 | `bevykit_input`  | Actions, contexts, rebinding, fixed-tick input, pointers, gestures         |
 | `bevykit_ui`     | Themes, widgets, focus, panels, bindings, world anchors, feedback          |
 | `bevykit_data`   | Asset groups, content definitions, saves, settings, localization           |
+| `bevykit_media`  | Audio buses, cues, music, scene bindings, animation clips and markers      |
 | `bevykit_macros` | Derive macros                                                              |
 
-Audio, scene, and animation helpers are planned in `bevykit_media`; see [media.md](media.md).
+Audio, scene, and animation helpers live in `bevykit_media`.
 
 ## Setup
 

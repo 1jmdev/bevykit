@@ -15,14 +15,15 @@ categories = ["game-development", "game-engines"]
 [workspace.dependencies]
 bevy = { version = "0.19.1", default-features = false }
 
-bevykit = { path = "crates/bevykit", version = "0.1.0" }
 bevykit_core = { path = "crates/bevykit_core", version = "0.1.0" }
 bevykit_data = { path = "crates/bevykit_data", version = "0.1.0" }
 bevykit_input = { path = "crates/bevykit_input", version = "0.1.0" }
 bevykit_macros = { path = "crates/bevykit_macros", version = "0.1.0" }
+bevykit_media = { path = "crates/bevykit_media", version = "0.1.0" }
 bevykit_ui = { path = "crates/bevykit_ui", version = "0.1.0" }
 
 directories = "6.0"
+fastrand = "2.3"
 intl_pluralrules = "7.0"
 proc-macro-crate = "3.3"
 proc-macro2 = "1.0"
