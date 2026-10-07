@@ -21,11 +21,11 @@ use crate::state::WidgetState;
 type Evaluate = Box<dyn FnMut(&World, bool) -> Option<Box<dyn FnOnce(&mut EntityWorldMut) + Send>> + Send + Sync>;
 
 /// One binding on a widget.
-pub struct Binding {
+pub struct WidgetBinding {
     evaluate: Evaluate,
 }
 
-impl Binding {
+impl WidgetBinding {
     /// Binds a value computed from resource `R`, applying it with `apply` whenever it changes.
     pub fn resource<R, V>(
         read: impl Fn(&R) -> V + Send + Sync + 'static,
@@ -55,17 +55,17 @@ impl Binding {
 
 /// The bindings of a widget.
 #[derive(Component, Default)]
-pub struct Bindings(Vec<Binding>);
+pub struct Bindings(Vec<WidgetBinding>);
 
 impl Bindings {
     /// Adds a binding.
-    pub fn push(&mut self, binding: Binding) {
+    pub fn push(&mut self, binding: WidgetBinding) {
         self.0.push(binding);
     }
 }
 
 /// Adds a binding to a widget under construction.
-pub(crate) fn add_binding(entity: &mut EntityCommands, binding: Binding) {
+pub(crate) fn add_binding(entity: &mut EntityCommands, binding: WidgetBinding) {
     entity
         .entry::<Bindings>()
         .or_default()
@@ -119,7 +119,7 @@ pub trait BindingExt<'a>: WidgetBuilder<'a> {
     ) -> &mut Self {
         add_binding(
             self.entity_commands(),
-            Binding::resource(condition, |entity, enabled: bool| {
+            WidgetBinding::resource(condition, |entity, enabled: bool| {
                 if let Some(mut state) = entity.get_mut::<WidgetState>() {
                     state.disabled = !enabled;
                 }
@@ -136,7 +136,7 @@ pub trait BindingExt<'a>: WidgetBuilder<'a> {
     ) -> &mut Self {
         add_binding(
             self.entity_commands(),
-            Binding::resource(condition, |entity, visible: bool| {
+            WidgetBinding::resource(condition, |entity, visible: bool| {
                 if let Some(mut node) = entity.get_mut::<Node>() {
                     node.display = if visible { Display::Flex } else { Display::None };
                 }
@@ -146,7 +146,7 @@ pub trait BindingExt<'a>: WidgetBuilder<'a> {
     }
 
     /// Adds a custom binding.
-    fn bind(&mut self, binding: Binding) -> &mut Self {
+    fn bind(&mut self, binding: WidgetBinding) -> &mut Self {
         add_binding(self.entity_commands(), binding);
         self
     }

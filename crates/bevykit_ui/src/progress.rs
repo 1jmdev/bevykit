@@ -3,7 +3,7 @@
 use bevy::picking::Pickable;
 use bevy::prelude::*;
 
-use crate::binding::{Binding, add_binding};
+use crate::binding::{WidgetBinding, add_binding};
 use crate::builder::{UiBuilder, WidgetBuilder};
 use crate::state::WidgetVisuals;
 
@@ -43,7 +43,7 @@ impl ProgressBuilder<'_> {
     ) -> &mut Self {
         add_binding(
             &mut self.entity,
-            Binding::resource(read, |entity, value: f32| {
+            WidgetBinding::resource(read, |entity, value: f32| {
                 if let Some(mut bar) = entity.get_mut::<ProgressBar>() {
                     bar.value = value;
                 }

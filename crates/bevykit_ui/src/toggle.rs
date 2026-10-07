@@ -3,7 +3,7 @@
 use bevy::picking::Pickable;
 use bevy::prelude::*;
 
-use crate::binding::{Binding, add_binding};
+use crate::binding::{WidgetBinding, add_binding};
 use crate::builder::{UiBuilder, WidgetBuilder};
 use crate::focus::Focusable;
 use crate::interaction::{Activated, OnValueChange, Pressable, ValueChanged};
@@ -63,7 +63,7 @@ impl ToggleBuilder<'_> {
     ) -> &mut Self {
         add_binding(
             &mut self.entity,
-            Binding::resource(read, |entity, value: bool| {
+            WidgetBinding::resource(read, |entity, value: bool| {
                 if let Some(mut toggle) = entity.get_mut::<Toggle>() {
                     toggle.value = value;
                 }

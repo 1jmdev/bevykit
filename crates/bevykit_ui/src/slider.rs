@@ -14,7 +14,7 @@ use bevy::ui::{ComputedNode, UiGlobalTransform};
 use bevykit_input::prelude::*;
 
 use crate::actions::NavigationRequest;
-use crate::binding::{Binding, add_binding};
+use crate::binding::{WidgetBinding, add_binding};
 use crate::builder::{UiBuilder, WidgetBuilder};
 use crate::focus::Focusable;
 use crate::geometry::logical_rect;
@@ -137,7 +137,7 @@ impl SliderBuilder<'_> {
     ) -> &mut Self {
         add_binding(
             &mut self.entity,
-            Binding::resource(read, |entity, value: f32| {
+            WidgetBinding::resource(read, |entity, value: f32| {
                 if let Some(mut slider) = entity.get_mut::<Slider>()
                     && slider.dragging.is_none()
                 {

@@ -44,7 +44,7 @@ pub mod prelude {
     pub use crate::KitUiPlugin;
     pub use crate::actions::{UiAction, ui_context};
     pub use crate::anchor::{AnchorTarget, OffscreenBehavior, WorldAnchor};
-    pub use crate::binding::{Binding, BindingExt};
+    pub use crate::binding::{BindingExt, WidgetBinding};
     pub use crate::builder::{Ui, UiBuilder, Widget, WidgetBuilder};
     pub use crate::camera_shake::CameraShake;
     pub use crate::countdown::{Countdown, CountdownFormat};

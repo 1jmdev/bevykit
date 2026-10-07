@@ -9,7 +9,7 @@ use bevy::picking::Pickable;
 use bevy::prelude::*;
 use bevykit_core::deadline::{Deadline, Deadlines};
 
-use crate::binding::{Binding, add_binding};
+use crate::binding::{WidgetBinding, add_binding};
 use crate::builder::{UiBuilder, WidgetBuilder};
 use crate::text::ThemedText;
 
@@ -69,7 +69,7 @@ impl CountdownBuilder<'_> {
     ) -> &mut Self {
         add_binding(
             &mut self.entity,
-            Binding::resource(read, |entity, deadline: Option<Deadline>| {
+            WidgetBinding::resource(read, |entity, deadline: Option<Deadline>| {
                 if let Some(mut countdown) = entity.get_mut::<Countdown>() {
                     countdown.deadline = deadline;
                 }

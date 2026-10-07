@@ -3,7 +3,7 @@
 use bevy::picking::Pickable;
 use bevy::prelude::*;
 
-use crate::binding::{Binding, add_binding};
+use crate::binding::{WidgetBinding, add_binding};
 use crate::builder::{UiBuilder, WidgetBuilder};
 use crate::text::{ThemedText, UiText};
 use crate::theme::TextRole;
@@ -33,7 +33,7 @@ impl LabelBuilder<'_> {
     ) -> &mut Self {
         add_binding(
             &mut self.entity,
-            Binding::resource(move |resource: &R| read(resource).into(), set_label_text),
+            WidgetBinding::resource(move |resource: &R| read(resource).into(), set_label_text),
         );
         self
     }
