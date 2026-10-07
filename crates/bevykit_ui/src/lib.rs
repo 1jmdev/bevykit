@@ -7,16 +7,21 @@ pub mod anchor;
 pub mod binding;
 pub mod builder;
 pub mod button;
+pub mod camera_shake;
 pub mod countdown;
+pub mod feedback;
 pub mod focus;
 pub mod geometry;
 pub mod image;
 pub mod interaction;
 pub mod label;
 pub mod layout;
+pub mod lifetime;
 pub mod modal;
+pub mod notification;
 pub mod panel;
 pub mod progress;
+pub mod safe_area;
 pub mod scroll;
 pub mod slider;
 pub mod state;
@@ -41,11 +46,16 @@ pub mod prelude {
     pub use crate::anchor::{AnchorTarget, OffscreenBehavior, WorldAnchor};
     pub use crate::binding::{Binding, BindingExt};
     pub use crate::builder::{Ui, UiBuilder, Widget, WidgetBuilder};
+    pub use crate::camera_shake::CameraShake;
     pub use crate::countdown::{Countdown, CountdownFormat};
+    pub use crate::feedback::{Feedback, FeedbackLook, FeedbackSettings, FeedbackStyle, FeedbackStyles};
     pub use crate::focus::{Focus, FocusId, FocusLinks, FocusTrap, Focusable, InitialFocus};
     pub use crate::interaction::{Activated, OnActivate, Pressable, ValueChanged};
+    pub use crate::lifetime::Lifetime;
+    pub use crate::notification::{Notification, NotificationSettings};
     pub use crate::panel::{Dismissible, PanelClosed, PanelId, Panels};
     pub use crate::progress::ProgressBar;
+    pub use crate::safe_area::{SafeAreaRoot, UiScalePolicy};
     pub use crate::scroll::{ScrollMemory, ScrollView};
     pub use crate::slider::Slider;
     pub use crate::state::{WidgetState, WidgetVisuals};
@@ -110,6 +120,10 @@ impl Plugin for KitUiPlugin {
             .add_observer(tabs::select_on_activate)
             .add_observer(text_field::report_text_changes)
             .init_resource::<tooltip::TooltipSettings>()
+            .init_resource::<feedback::FeedbackSettings>()
+            .init_resource::<feedback::FeedbackStyles>()
+            .init_resource::<notification::NotificationQueue>()
+            .init_resource::<notification::NotificationSettings>()
             .init_resource::<tooltip::ActiveTooltip>()
             .configure_sets(
                 PostUpdate,
@@ -171,7 +185,32 @@ impl Plugin for KitUiPlugin {
             )
             .add_systems(
                 PostUpdate,
-                anchor::position_anchored_nodes.in_set(KitSystems::Presentation),
+                (
+                    safe_area::apply_safe_area,
+                    safe_area::apply_scale_policy,
+                    notification::show_notifications,
+                )
+                    .in_set(KitSystems::Bindings),
+            )
+            .add_systems(First, camera_shake::remove_shake_offset)
+            .add_systems(
+                PostUpdate,
+                (
+                    feedback::animate_floating_text,
+                    anchor::position_anchored_nodes,
+                    camera_shake::apply_shake_offset,
+                )
+                    .chain()
+                    .in_set(KitSystems::Presentation),
+            )
+            .add_systems(
+                Last,
+                lifetime::expire_lifetimes.in_set(KitSystems::Cleanup),
             );
+        #[cfg(feature = "localization")]
+        app.add_systems(
+            PostUpdate,
+            safe_area::apply_text_direction.in_set(KitSystems::Bindings),
+        );
     }
 }

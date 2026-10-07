@@ -32,5 +32,8 @@ bevykit_core = { workspace = true }
 bevykit_data = { workspace = true, optional = true }
 bevykit_input = { workspace = true }
 
+[dev-dependencies]
+bevy = { workspace = true, features = ["debug"] }
+
 [lints]
 workspace = true

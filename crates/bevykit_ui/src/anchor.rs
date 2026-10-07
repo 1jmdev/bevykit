@@ -39,7 +39,7 @@ pub enum OffscreenBehavior {
 }
 
 /// Positions an absolutely positioned UI node at a world position seen through a camera.
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Copy, Debug, PartialEq, Reflect)]
 #[reflect(Component)]
 pub struct WorldAnchor {
     /// The followed entity or point.
