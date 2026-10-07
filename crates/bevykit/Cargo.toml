@@ -9,10 +9,31 @@ rust-version.workspace = true
 authors.workspace = true
 keywords.workspace = true
 categories.workspace = true
+readme = "README.md"
+
+[features]
+default = ["input", "ui", "assets", "content", "save", "settings", "localization"]
+input = ["dep:bevykit_input"]
+ui = ["input", "dep:bevykit_ui"]
+feedback = ["ui"]
+assets = ["dep:bevykit_data"]
+content = ["dep:bevykit_data"]
+save = ["dep:bevykit_data"]
+settings = ["dep:bevykit_data"]
+localization = ["dep:bevykit_data", "bevykit_ui?/localization"]
+mobile = []
 
 [dependencies]
+bevy = { workspace = true }
 bevykit_core = { workspace = true }
+bevykit_data = { workspace = true, optional = true }
 bevykit_input = { workspace = true, optional = true }
+bevykit_macros = { workspace = true }
+bevykit_ui = { workspace = true, optional = true, default-features = false }
+
+[dev-dependencies]
+bevy = { workspace = true, features = ["default", "file_watcher"] }
+serde = { workspace = true }
 
 [lints]
 workspace = true
